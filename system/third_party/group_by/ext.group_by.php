@@ -88,31 +88,29 @@ class Group_by_ext {
         // Check for our parameter from the exp:channel:entries tag
         $group_by = $this->EE->TMPL->fetch_param('group_by', '');
 
-        // if parameter found
-        if (!is_null($group_by) AND !empty($group_by)) {
-
-            $existing = array();
-            $grouped_result = array();
-
-            foreach ($query_result as $entry) {
-                if (isset($entry[$group_by]) AND !empty($entry[$group_by])) {
-                    $needle = (string)$entry[$group_by];
-                    if (!array_search($needle, $existing)) {
-                        array_push($existing,$needle);
-                        array_push($grouped_result,$entry);
-                    }
-                }
-            }
-
-            if ($grouped_result) {
-                return $grouped_result;
-            } else {
-                return $query_result;
-            }
-
-        } else {
+        // Return early if parameter is not found. Nothing else to do.
+        if (is_null($group_by) OR empty($group_by)) {
             return $query_result;
         }
+
+        $existing = array();
+        $grouped_result = array();
+
+        foreach ($query_result as $entry) {
+            if (isset($entry[$group_by]) AND !empty($entry[$group_by])) {
+                $needle = (string)$entry[$group_by];
+                if (!array_search($needle, $existing)) {
+                    array_push($existing,$needle);
+                    array_push($grouped_result,$entry);
+                }
+            }
+        }
+
+        if (!empty($grouped_result)) {
+            return $grouped_result;
+        }
+        
+        return $query_result;
     }
 
     // ----------------------------------------------------------------------
