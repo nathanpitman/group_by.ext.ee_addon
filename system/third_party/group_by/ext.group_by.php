@@ -31,7 +31,7 @@ class Group_by_ext {
     public $docs_url        = 'http://www.ninefour.co.uk/labs/';
     public $name            = 'Group By';
     public $settings_exist  = 'n';
-    public $version         = '1.0';
+    public $version         = '1.0.1';
 
     private $EE;
 
@@ -86,7 +86,7 @@ class Group_by_ext {
     public function group_by($obj, $query_result)
     {
         // Check for our parameter from the exp:channel:entries tag
-        $group_by = $this->EE->TMPL->fetch_param('group_by', '');
+        $group_by = $this->EE->TMPL->fetch_param('groupby');
 
         // Return early if parameter is not found. Nothing else to do.
         if (is_null($group_by) OR empty($group_by)) {
@@ -99,9 +99,9 @@ class Group_by_ext {
         foreach ($query_result as $entry) {
             if (isset($entry[$group_by]) AND !empty($entry[$group_by])) {
                 $needle = (string)$entry[$group_by];
-                if (!array_search($needle, $existing)) {
-                    array_push($existing,$needle);
-                    array_push($grouped_result,$entry);
+                if (array_search($needle, $existing)===FALSE) {
+                    array_push($existing, $needle);
+                    array_push($grouped_result, $entry);
                 }
             }
         }
@@ -109,7 +109,7 @@ class Group_by_ext {
         if (!empty($grouped_result)) {
             return $grouped_result;
         }
-        
+
         return $query_result;
     }
 
