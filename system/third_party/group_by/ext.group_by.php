@@ -33,8 +33,6 @@ class Group_by_ext {
     public $settings_exist  = 'n';
     public $version         = '1.0.2';
 
-    private $EE;
-
     /**
      * Constructor
      *
@@ -42,7 +40,6 @@ class Group_by_ext {
      */
     public function __construct($settings = '')
     {
-        $this->EE =& get_instance();
         $this->settings = $settings;
     }// ----------------------------------------------------------------------
 
@@ -70,7 +67,7 @@ class Group_by_ext {
             'enabled'   => 'y'
         );
 
-        $this->EE->db->insert('extensions', $data);
+        ee()->db->insert('extensions', $data);
 
         // No hooks selected, add in your own hooks installation code here.
     }
