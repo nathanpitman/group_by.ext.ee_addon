@@ -31,7 +31,7 @@ class Group_by_ext {
     public $docs_url        = 'http://www.ninefour.co.uk/labs/';
     public $name            = 'Group By';
     public $settings_exist  = 'n';
-    public $version         = '1.0.1';
+    public $version         = '1.0.2';
 
     private $EE;
 
@@ -85,8 +85,14 @@ class Group_by_ext {
      */
     public function group_by($obj, $query_result)
     {
+
+        // Get the latest version of $query_result
+        if (ee()->extensions->last_call !== FALSE) {
+            $query_result = ee()->extensions->last_call;
+        }
+
         // Check for our parameter from the exp:channel:entries tag
-        $group_by = $this->EE->TMPL->fetch_param('groupby');
+        $group_by = ee()->TMPL->fetch_param('groupby');
 
         // Return early if parameter is not found. Nothing else to do.
         if (is_null($group_by) OR empty($group_by)) {
@@ -124,8 +130,8 @@ class Group_by_ext {
      */
     function disable_extension()
     {
-        $this->EE->db->where('class', __CLASS__);
-        $this->EE->db->delete('extensions');
+        ee()->db->where('class', __CLASS__);
+        ee()->db->delete('extensions');
     }
 
     // ----------------------------------------------------------------------
